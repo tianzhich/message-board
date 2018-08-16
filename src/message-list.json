@@ -1,0 +1,36 @@
+[
+  {
+    "id": "1",
+    "author": "tianzhi",
+    "mail": "zhi.tian@yahoo.com",
+    "date": "2018-08-13",
+    "time": "15:28",
+    "content": "Nice list! Thank you. There is one more thing you missed, which IMO is essential for JS development: ESLint for VSCode",
+    "replyList": [
+      {
+        "id": "1_1",
+        "author": "yang",
+        "replyTo": "tianzhi",
+        "date": "2018-08-14",
+        "time": "15:30",
+        "content": "These were some of the VSCode extensions that I use regularly. What other extensions and themes do you like? Respond to this article and mention them."
+      },
+      {
+        "id": "1_2",
+        "author": "yang",
+        "replyTo": "tianzhi",
+        "date": "2018-08-14",
+        "time": "15:30",
+        "content": "These were some of the VSCode extensions that I use regularly. What other extensions and themes do you like? Respond to this article and mention them."
+      },
+      {
+        "id": "1_1",
+        "author": "wang",
+        "replyTo": "yang",
+        "date": "2018-08-14",
+        "time": "15:30",
+        "content": "These were some of the VSCode extensions that I use regularly. What other extensions and themes do you like? Respond to this article and mention them."
+      }
+    ]
+  }
+]

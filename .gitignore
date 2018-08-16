@@ -1,0 +1,8 @@
+# Dependencies
+/node_modules
+
+# production
+/dist
+
+# VSCode config
+/.vscode
