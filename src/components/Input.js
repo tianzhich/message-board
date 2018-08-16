@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 const InputWrapper = styled.div`
   background-color: rgb(255, 255, 255);
   position: relative;
+  box-sizing: border-box;
   width: 600px;
   margin: 5px auto 0;
   box-shadow: 0 1px 4px rgba(0,0,0,.03);

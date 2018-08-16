@@ -1,13 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
-
+import ClapButton from '../components/ClapButton';
 
 const StyledItem = styled.div`
-  width: 100%;
-  min-height: 200px;
+  padding: 15px 20px;
+  min-height: 170px;
   background-color: rgb(255,255,255);
   position: relative;
-  margin: 5px auto 0;
   box-shadow: 0 1px 4px rgba(0,0,0,.03);
   border: 1px solid rgba(0,0,0,.09);
   border-radius: 3px;
@@ -28,9 +27,28 @@ const Content = styled.div`
 `
 
 const Footer = styled.div`
-  height: 40px;
+  & > div:nth-child(1) {
+    position: relative;
+    width: 50px;
+    float: left;
+    height: 30px;
+    display: flex;
+    align-items: flex-end;
+  }
+  & > div:nth-child(2) {
+    position: relative;
+    float: right;
+    display: flex;
+    height: 30px;
+    width: 140px;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  height: 30px;
   padding-top: 10px;
   position: relative;
+  font-size: .8em;
 `
 
 
@@ -40,26 +58,26 @@ class MessageItem extends React.Component {
     super(props);
   }
 
-render() {
-  const { author, date, time, content } = this.props;
-  return (
-    <StyledItem>
-      <Header>
-      </Header>
-      <Content>
-        {
-          this.props.replyList ? `${content}` : `@ ${this.props.replyTo} ${content}`
-        }
-      </Content>
-      <Footer>
-        {/* <Applause /> */}
-        {
-          this.props.children
-        }
-      </Footer>
-    </StyledItem>
-  );
-}
+  render() {
+    const { author, date, time, content } = this.props;
+    return (
+      <StyledItem>
+        <Header>
+        </Header>
+        <Content>
+          {
+            this.props.replyList ? `${content}` : `@ ${this.props.replyTo} ${content}`
+          }
+        </Content>
+        <Footer>
+          <ClapButton id={this.props.id}/>
+          {
+            this.props.children
+          }
+        </Footer>
+      </StyledItem>
+    );
+  }
 }
 
 export default MessageItem;

@@ -4,7 +4,7 @@ import Message from './Message'
 
 const BoardWrapper = styled.div`
   width: 600px;
-  margin: 0 auto;
+  margin: 10% auto;
 `
 
 const MessageList = styled.ul`

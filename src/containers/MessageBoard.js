@@ -2,9 +2,8 @@ import React from 'react'
 import Board from '../components/Board'
 import { connect } from 'react-redux'
 
-const mapStateToProps = (state, ownProps) => ({
+const mapStateToProps = (state) => ({
   messages: state,
-  onReply: ownProps.onReply
 })
 
 export default connect(

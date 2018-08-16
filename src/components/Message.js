@@ -8,18 +8,23 @@ import Input from './Input'
 import { InputType } from "../constants";
 
 const MessageWrapper = styled.li`
-  
+  padding: 40px 0;
+  border-top: 1px dotted rgb(236, 236, 236);
 `
 
 const ReplyList = styled.ul`
   display: ${props => props.showReply ? "block" : "none"};
   padding: 0;
+  & div {
+    margin: 0;
+  }
 `
 
 const ShowReplyButton = styled.div`
   color: inherit;
 
-  &:hover {
+  & > span, & > img {
+    cursor: pointer;
     color: rgba(0,0,0,.68);
   }
 `
@@ -47,7 +52,7 @@ class Message extends React.Component {
       replyTo: this.props.message.author
     });
 
-    if(!this.state.showReply) {
+    if (!this.state.showReply) {
       this.props.onShowReply(this.props.message.id);
     } else {
       this.props.onShowReply("");
@@ -75,19 +80,21 @@ class Message extends React.Component {
         <MainMessage {...this.props.message}>
           <ShowReplyButton onClick={this.toggleReplyList} >
             <span>{replyList ? `${replyList.length} response` : ``}</span>
-            <span>reply</span>
-            <img src={downArrow} alt="" 
-              style={{ 
-                display: showReply ? "none" : "inline-block",
-                height: 15 
-              }} 
-            />
-            <img src={upArrow} alt="" 
-              style={{ 
-                display: showReply ? "inline-block" : "none" ,
-                height: 15,
-            }} 
-            />
+            <div>
+              <span className="reply">reply</span>
+              <img src={downArrow} alt=""
+                style={{
+                  display: showReply ? "none" : "inline-block",
+                  height: 12
+                }}
+              />
+              <img src={upArrow} alt=""
+                style={{
+                  display: showReply ? "inline-block" : "none",
+                  height: 12,
+                }}
+              />
+            </div>
           </ShowReplyButton>
         </MainMessage>
         <ReplyList showReply={showReply}>
@@ -95,13 +102,13 @@ class Message extends React.Component {
             replyList ? replyList.map(reply =>
               <ReplyItem key={reply.id} {...reply}>
                 <ShowReplyButton>
-                  <span onClick={() => this.handleReply(reply.author)}>reply</span>
+                  <span className="reply" onClick={() => this.handleReply(reply.author)}>reply</span>
                 </ShowReplyButton>
               </ReplyItem>
             ) : null
           }
           <Input
-            ref = {this.textInput}
+            ref={this.textInput}
             id={this.props.message.id}
             type={InputType.REPLY_INPUT}
             onReply={(content) => this.handleOnReply(content)}
