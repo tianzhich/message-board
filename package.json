@@ -32,6 +32,7 @@
     "url": ""
   },
   "dependencies": {
+    "md5": "^2.2.1",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-modal": "^3.5.1",

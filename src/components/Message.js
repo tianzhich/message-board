@@ -23,7 +23,7 @@ const ReplyList = styled.ul`
 const ShowReplyButton = styled.div`
   color: inherit;
 
-  & > span, & > img {
+  & span:hover, & > img {
     cursor: pointer;
     color: rgba(0,0,0,.68);
   }
