@@ -6,7 +6,7 @@ import Input from './Input'
 import { InputType } from "../constants";
 
 const MessageWrapper = styled.li`
-  padding: 40px 0;
+  padding: 20px 0;
   border-top: 1px dotted rgb(236, 236, 236);
 `
 
@@ -43,25 +43,17 @@ class Message extends React.Component {
     this.textInput = React.createRef();
   }
 
-  static getDerivedStateFromProps(nextProps) {
-    return {
-      showReply: nextProps.showReplyList
-    }
-  }
-
   // 展开楼层列表，默认回复楼主，同时需要关闭其他楼层
   // replyTo存在则说明回复层主
   toggleReplyList = (replyTo) => {
     this.textInput.current.handleBlur();
+    this.setState(prevState => ({
+      showReply: !prevState.showReply
+    }));
 
-    // 如果当前楼层没有展开回复，则传当前楼层ID给父组件，更新props使其展开；否则收起该层回复
-    if (!this.state.showReply && !replyTo) {
-      this.props.onShowReply(this.props.message._id);
-    } else if (replyTo) {
+    if (replyTo) {
       window.location.href = `#${this.props.message._id}`;
       this.textInput.current.handleFocus(); // focus必须发生在hash跳转之后！！！
-    } else {
-      this.props.onShowReply("");
     }
 
     this.setState({
@@ -83,23 +75,10 @@ class Message extends React.Component {
             <span>{replyList ? `${replyList.length} response` : ``}</span>
             <div>
               <span className="reply">reply</span>
-              <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 129 129" width="12px" height="12px" 
-              style={{transform: showReply ? 'rotateZ(180deg)' : ''}} >
-              <g><path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z" /></g>
+              <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 129 129" width="12px" height="12px"
+                style={{ transform: showReply ? 'rotateZ(180deg)' : '' }} >
+                <g><path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z" /></g>
               </svg>
-              {/* <img src={downArrow} alt=""
-                style={{
-                  display: showReply ? "none" : "inline-block",
-                  height: 12
-                }}
-              />
-              <img src={upArrow} alt=""
-                style={{
-                  display: showReply ? "inline-block" : "none",
-                  height: 12,
-                }}
-              /> */}
-
             </div>
           </ShowReplyButton>
         </MainMessage>

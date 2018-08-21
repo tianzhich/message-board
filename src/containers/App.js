@@ -4,13 +4,17 @@ import MessageInput from '../components/Input'
 import MessageBoard from '../components/MessageBoard'
 import EmailInput from '../components/EmailInput';
 import { InputType } from "../constants";
-import { addMessage, addReply, getMessages, removeDB } from '../tools.js'
+import { addMessage, addReply, getMessages, removeDB, loadTemplate } from '../tools.js'
 
 const Wrapper = styled.div`
   width: 80%;
   margin: 0 auto;
   text-align: center;
   background-color: rgb(250, 250, 250);
+`
+
+const Button = styled.button`
+  font-size: 13px;
 `
 
 class App extends React.Component {
@@ -37,6 +41,40 @@ class App extends React.Component {
     }).catch(err => {
       console.log("暂时获取留言板信息！" + err);
     })
+  }
+
+  loadTemplate = () => {
+    if(window.confirm('载入模板会删除您现在所有的留言板数据，确认载入吗？')) {
+      loadTemplate().then(() => {
+        getMessages().then(messageList => {
+          console.log("获取模板信息成功！");
+          this.setState({
+            messageList
+          });
+        }).catch(err => {
+          console.log("暂时无法获取模板信息！" + err);
+        })
+      }).catch(err => {
+        console.log('加载模板失败，请稍后重试'+err)
+      });
+    }
+  }
+
+  removeTemplate = () => {
+    if (window.confirm('删除模板会删除包括模板在内的所有的留言板数据，确认删除吗？')) {
+      removeDB().then(() => {
+        getMessages().then(messageList => {
+          console.log("模板删除成功！");
+          this.setState({
+            messageList
+          });
+        }).catch(err => {
+          console.log("模板删除成功，但是暂时无法获取模板信息！" + err);
+        })
+      }).catch((err) => {
+        console.log('删除失败，请稍后重试!' + err);
+      });
+    }
   }
 
   handleSubmit = (author, email) => {
@@ -124,6 +162,8 @@ class App extends React.Component {
     return (
       <Wrapper>
         <h1>Message Board</h1>
+        <Button onClick={this.loadTemplate}>载入模板</Button>
+        <Button onClick={this.removeTemplate}>删除模板</Button>
         <MessageInput
           type={InputType.RESPONSE_INPUT}
           onResponse={(content) =>
