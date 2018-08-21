@@ -2,8 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import MainMessage from './MessageItem'
 import ReplyItem from './MessageItem'
-import downArrow from '../images/down-arrow.svg'
-import upArrow from '../images/up-arrow.svg'
 import Input from './Input'
 import { InputType } from "../constants";
 
@@ -22,10 +20,16 @@ const ReplyList = styled.ul`
 
 const ShowReplyButton = styled.div`
   color: inherit;
+  svg {
+    fill: inherit;
+  }
 
-  & span:hover, & > img {
+  &:hover {
     cursor: pointer;
     color: rgba(0,0,0,.68);
+    svg {
+      fill: rgba(0,0,0,.68);
+    }
   }
 `
 
@@ -49,12 +53,11 @@ class Message extends React.Component {
   // replyTo存在则说明回复层主
   toggleReplyList = (replyTo) => {
     this.textInput.current.handleBlur();
-    console.log(replyTo);
 
     // 如果当前楼层没有展开回复，则传当前楼层ID给父组件，更新props使其展开；否则收起该层回复
     if (!this.state.showReply && !replyTo) {
       this.props.onShowReply(this.props.message._id);
-    } else if(replyTo) {
+    } else if (replyTo) {
       window.location.href = `#${this.props.message._id}`;
       this.textInput.current.handleFocus(); // focus必须发生在hash跳转之后！！！
     } else {
@@ -80,7 +83,11 @@ class Message extends React.Component {
             <span>{replyList ? `${replyList.length} response` : ``}</span>
             <div>
               <span className="reply">reply</span>
-              <img src={downArrow} alt=""
+              <svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 129 129" width="12px" height="12px" 
+              style={{transform: showReply ? 'rotateZ(180deg)' : ''}} >
+              <g><path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z" /></g>
+              </svg>
+              {/* <img src={downArrow} alt=""
                 style={{
                   display: showReply ? "none" : "inline-block",
                   height: 12
@@ -91,7 +98,8 @@ class Message extends React.Component {
                   display: showReply ? "inline-block" : "none",
                   height: 12,
                 }}
-              />
+              /> */}
+
             </div>
           </ShowReplyButton>
         </MainMessage>
@@ -99,12 +107,11 @@ class Message extends React.Component {
           {
             replyList ? replyList.map(reply =>
               <ReplyItem key={reply._id} {...reply}>
-                <ShowReplyButton>
-                  <span className="reply" 
+                <ShowReplyButton style={{ justifyContent: 'flex-end' }}>
+                  <span className="reply"
                     onClick={() => this.toggleReplyList(reply.author)}
-                    style={{ justifyContent: flex-end }}
                   >
-                  reply
+                    reply
                   </span>
                 </ShowReplyButton>
               </ReplyItem>
