@@ -8,6 +8,10 @@ export const getGravatar = (emailStr) => {
 
 const db = new PouchDB('messageList');
 
+const getRandomCount = (left, right) => {
+  return Math.floor(left + Math.random() * (right-left+1));
+}
+
 export const removeDB = () => {
   return db.allDocs().then(results => {
     return Promise.all(results.rows.map((row) => {
@@ -22,7 +26,13 @@ export const loadTemplate = () => {
       db.put({
         ...message,
         gravatar: getGravatar(message.email),
-        replyList: message.replyList.map(reply => ({ ...reply, gravatar: getGravatar(reply.email) }))
+        applause: getRandomCount(50, 100),
+        replyList: message.replyList.map(reply => (
+          { ...reply, 
+            gravatar: getGravatar(reply.email),
+            applause: getRandomCount(5, 20),
+          }
+        ))
       });
     }));
   });
@@ -35,6 +45,7 @@ export const addMessage = (author, email, text) => {
     email,
     gravatar: getGravatar(email),
     text,
+    applause: 0,
     replyList: []
   }
   return db.put(message);
@@ -47,6 +58,7 @@ export const addReply = (messageId, author, replyTo, email, text) => {
     gravatar: getGravatar(email),
     replyTo,
     email,
+    applause: 0,
     text
   };
   return db.get(messageId).then(message => {

@@ -66,6 +66,8 @@ const DateName = styled.div`
 
 const Content = styled.div`
   flex-grow: 1;
+  display: flex;
+  justify-content: flex-start;
 `
 
 const Footer = styled.div`
@@ -107,7 +109,7 @@ class MessageItem extends React.Component {
   }
 
   render() {
-    const { _id, author, text, gravatar } = this.props;
+    const { _id, author, text, gravatar, applause } = this.props;
     let date = moment(Number(_id)).format('YYYY-MM-DD, HH:mm');
     return (
       <StyledItem>
@@ -129,7 +131,7 @@ class MessageItem extends React.Component {
           }
         </Content>
         <Footer>
-          <ClapButton id={_id} />
+          <ClapButton id={_id} count={applause}/>
           {
             this.props.children
           }

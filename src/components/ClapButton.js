@@ -42,7 +42,7 @@ class Applause extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      countTotal: 0,
+      countTotal: props.count,
       isClicked: false,
     }
     this._handleClick = this._handleClick.bind(this);
