@@ -46,30 +46,28 @@ class Message extends React.Component {
   }
 
   // 展开楼层列表，默认回复楼主，同时需要关闭其他楼层
-  toggleReplyList = () => {
+  // replyTo存在则说明回复层主
+  toggleReplyList = (replyTo) => {
     this.textInput.current.handleBlur();
-    this.setState({
-      replyTo: this.props.message.author
-    });
+    console.log(replyTo);
 
-    if (!this.state.showReply) {
-      this.props.onShowReply(this.props.message.id);
+    // 如果当前楼层没有展开回复，则传当前楼层ID给父组件，更新props使其展开；否则收起该层回复
+    if (!this.state.showReply && !replyTo) {
+      this.props.onShowReply(this.props.message._id);
+    } else if(replyTo) {
+      window.location.href = `#${this.props.message._id}`;
+      this.textInput.current.handleFocus(); // focus必须发生在hash跳转之后！！！
     } else {
       this.props.onShowReply("");
     }
-  }
 
-  /* 回复层主 */
-  handleReply = (replyTo) => {
     this.setState({
-      replyTo
+      replyTo: replyTo ? replyTo : this.props.message.author
     });
-    window.location.href = `#${this.props.message.id}`;
-    this.textInput.current.handleFocus(); // focus必须发生在hash跳转之后！！！
   }
 
-  handleOnReply = (content) => {
-    this.props.onReply(this.props.message.id, this.state.replyTo, content);
+  onReply = (content) => {
+    this.props.onReply(this.props.message._id, this.state.replyTo, content);
   }
 
   render() {
@@ -78,7 +76,7 @@ class Message extends React.Component {
     return (
       <MessageWrapper>
         <MainMessage {...this.props.message}>
-          <ShowReplyButton onClick={this.toggleReplyList} >
+          <ShowReplyButton onClick={() => this.toggleReplyList()} >
             <span>{replyList ? `${replyList.length} response` : ``}</span>
             <div>
               <span className="reply">reply</span>
@@ -100,18 +98,23 @@ class Message extends React.Component {
         <ReplyList showReply={showReply}>
           {
             replyList ? replyList.map(reply =>
-              <ReplyItem key={reply.id} {...reply}>
+              <ReplyItem key={reply._id} {...reply}>
                 <ShowReplyButton>
-                  <span className="reply" onClick={() => this.handleReply(reply.author)}>reply</span>
+                  <span className="reply" 
+                    onClick={() => this.toggleReplyList(reply.author)}
+                    style={{ justifyContent: flex-end }}
+                  >
+                  reply
+                  </span>
                 </ShowReplyButton>
               </ReplyItem>
             ) : null
           }
           <Input
             ref={this.textInput}
-            id={this.props.message.id}
+            id={this.props.message._id}
             type={InputType.REPLY_INPUT}
-            onReply={(content) => this.handleOnReply(content)}
+            onReply={(content) => this.onReply(content)}
           />
         </ReplyList>
       </MessageWrapper>

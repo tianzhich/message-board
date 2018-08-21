@@ -1,20 +1,22 @@
 {
   messageList: [
     {
-      id: "",
+      _id: "",
       author: "tianzhi",
-      mail: "zhi.tian@yahoo.com",
+      email: "zhi.tian@yahoo.com",
+      gravatar: "",
       date: "2018-08-13",
       time: "15:28",
-      content: "some contents",
+      text: "some contents",
       replyList: [
         {
           id: "",
           author: "yang",
+          gravatar: "",
           replyTo: "tianzhi",
           date: "",
           time: "",
-          content: "",
+          text: "",
         }
       ]
     }

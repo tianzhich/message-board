@@ -1,11 +1,10 @@
 import React from 'react';
 import styled from 'styled-components'
 import MessageInput from '../components/Input'
-import MessageBoard from './MessageBoard'
-import { InputType } from "../constants";
+import MessageBoard from '../components/MessageBoard'
 import EmailInput from '../components/EmailInput';
-import { addResponse, addReply } from "../actions";
-import { connect } from 'react-redux'
+import { InputType } from "../constants";
+import { addMessage, addReply, getMessages, removeDB } from '../tools.js'
 
 const Wrapper = styled.div`
   width: 80%;
@@ -18,8 +17,10 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputType: null,
-      showEmailInput: false,
+      messageList: [], // 所有的留言
+      inputType: null, // 当前输入是在留言（response）还是回复楼主的留言（reply）
+      showEmailInput: false, // 是否弹出邮件输入框
+      // 保留当前输入内容，因为输入内容之后需要输入邮箱和姓名，前者需要保存，后两者直接传入submit回调函数即可
       inputContent: {
         [InputType.REPLY_INPUT]: {},
         [InputType.RESPONSE_INPUT]: {}
@@ -27,24 +28,62 @@ class App extends React.Component {
     }
   }
 
+  componentDidMount() {
+    getMessages().then(messageList => {
+      console.log("获取留言板信息成功！");
+      this.setState({
+        messageList
+      });
+    }).catch(err => {
+      console.log("暂时获取留言板信息！" + err);
+    })
+  }
+
   handleSubmit = (author, email) => {
     let content, response_id, reply_to;
-    
     if (this.state.inputType === InputType.RESPONSE_INPUT) {
-
       content = this.state.inputContent[InputType.RESPONSE_INPUT].content;
 
-      this.props.addResponse(author, email, content);
+      addMessage(author, email, content).
+        then(response => {
+          if (response.ok) {
+            console.log("添加成功!");
+            getMessages().then(messageList => {
+              console.log("获取最新留言板成功！");
+              this.setState({
+                messageList
+              });
+            }).catch(err => {
+              console.log("暂时无法获取最新留言！" + err);
+            })
+          }
+        }).catch(err => {
+          console.log("添加留言失败，请稍后重试！" + err);
+        });;
 
     } else if (this.state.inputType === InputType.REPLY_INPUT) {
-
       content = this.state.inputContent[InputType.REPLY_INPUT].content;
       response_id = this.state.inputContent[InputType.REPLY_INPUT].response_id;
       reply_to = this.state.inputContent[InputType.REPLY_INPUT].reply_to;
 
-      this.props.addReply(response_id, email, author, reply_to, content);
+      addReply(response_id, author, reply_to, email, content).
+        then(response => {
+          if (response.ok) {
+            console.log("添加回复成功!");
+            getMessages().then(messageList => {
+              console.log("获取最新回复成功！");
+              this.setState({
+                messageList
+              });
+            }).catch(err => {
+              console.log("暂时无法获取最新回复！" + err);
+            })
+          }
+        }).catch(err => {
+          console.log("添加回复失败，请稍后重试！" + err);
+        })
     }
-
+    // 回到初始状态
     this.setState({
       inputType: null,
       showEmailInput: false,
@@ -53,7 +92,6 @@ class App extends React.Component {
         [InputType.RESPONSE_INPUT]: {}
       }
     });
-
   }
 
   handleResponse = (content) => {
@@ -92,11 +130,12 @@ class App extends React.Component {
             this.handleResponse(content)}
         />
         <MessageBoard
+          messages={this.state.messageList}
           onReply={(response_id, reply_to, content) =>
             this.handleReply(response_id, reply_to, content)}
         />
         <EmailInput
-          onSubmit={(author, email) => 
+          onSubmit={(author, email) =>
             this.handleSubmit(author, email)}
           show={this.state.showEmailInput}
         />
@@ -105,14 +144,4 @@ class App extends React.Component {
   }
 }
 
-const mapDispatchToProps = (dispatch) => ({
-  addResponse: (author, email, content) =>
-    dispatch(addResponse(author, email, content)),
-  addReply: (response_id, email, author, reply_to, content) =>
-    dispatch(addReply(response_id, email, author, reply_to, content)),
-})
-
-export default connect(
-  null,
-  mapDispatchToProps
-)(App);
+export default App;

@@ -12,17 +12,17 @@ const MessageList = styled.ul`
   padding: 0;
 `
 
-class Board extends React.Component {
+class MessageBoard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      responseID: "", // 当前展开楼层
+      messageId: "", // 当前展开楼层, 表示当前正在浏览或回复楼层(messageID表示)
     }
   }
 
-  handleShowReply = (id) => {
+  handleShowReply = (messageId) => {
     this.setState({
-      responseID: id
+      messageId
     });
   }
 
@@ -33,8 +33,8 @@ class Board extends React.Component {
         <MessageList>
           {
             messages.map(message =>
-              <Message message={message} key={message.id}
-                showReplyList={this.state.responseID === message.id ? true : false}
+              <Message message={message} key={message._id}
+                showReplyList={this.state.messageId === message._id ? true : false}
                 onShowReply= {(id) => this.handleShowReply(id)}
                 onReply={(response_id, reply_to, content) =>
                   this.props.onReply(response_id, reply_to, content)}
@@ -47,4 +47,4 @@ class Board extends React.Component {
   }
 }
 
-export default Board;
+export default MessageBoard;

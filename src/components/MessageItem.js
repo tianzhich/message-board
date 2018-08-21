@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import ClapButton from '../components/ClapButton';
-import { getGravatar } from '../actions/tools'
+import moment from 'moment';
 
 const StyledItem = styled.div`
   padding: 15px 20px;
@@ -96,7 +96,7 @@ const Footer = styled.div`
 `
 
 
-/* 如果属性中存在replyList，说明是主回复，否则说明是楼层内回复 */
+/* 如果属性中存在replyList，说明是message，否则说明是reply */
 class MessageItem extends React.Component {
   constructor(props) {
     super(props);
@@ -107,28 +107,29 @@ class MessageItem extends React.Component {
   }
 
   render() {
-    const { author, date, time, content, email } = this.props;
-    let regDate = new Date(date).toLocaleDateString();
-    let gravatarUrl = "https://www.gravatar.com/avatar/" + getGravatar(email) + "?d=identicon";
-    console.log(gravatarUrl);
+    const { _id, author, text, gravatar } = this.props;
+    let date = moment(Number(_id)).format('YYYY-MM-DD, HH:mm');
     return (
       <StyledItem>
         <Header>
           <div>
-            <img src={gravatarUrl} alt="" onClick={this.onMailTo}/>
+            <img 
+              src={"https://www.gravatar.com/avatar/" + gravatar + "?d=identicon"} alt="" 
+              onClick={this.onMailTo}
+            />
             <DateName>
               <span onClick={this.onMailTo}>{author}</span>
-              <span>{`${regDate} ${time}`}</span>
+              <span>{date}</span>
             </DateName>
           </div>
         </Header>
         <Content>
           {
-            this.props.replyList ? `${content}` : `@ ${this.props.replyTo} ${content}`
+            this.props.replyList ? `${text}` : `@ ${this.props.replyTo} ${text}`
           }
         </Content>
         <Footer>
-          <ClapButton id={this.props.id} />
+          <ClapButton id={_id} />
           {
             this.props.children
           }
