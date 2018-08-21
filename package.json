@@ -2,9 +2,12 @@
   "name": "message-board",
   "version": "1.0.0",
   "description": "A message board by Tian Zhi",
+  "homepage": "https://tianzhich.github.io/messagebord",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --config webpack.config.js --mode development"
+    "start": "webpack-dev-server --config webpack.config.js --mode development",
+    "build": "webpack --mode production",
+    "deploy": "gh-pages -d /dist"
   },
   "keywords": [],
   "author": "Zhi Tian <zhi.tian@yahoo.com>",
@@ -18,6 +21,7 @@
     "babel-preset-react": "^6.24.1",
     "css-loader": "^1.0.0",
     "file-loader": "^1.1.11",
+    "gh-pages": "^1.2.0",
     "image-webpack-loader": "^4.3.1",
     "node-sass": "^4.9.3",
     "prop-types": "^15.6.2",
@@ -29,7 +33,7 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/tianzhich/message-board"
   },
   "dependencies": {
     "md5": "^2.2.1",
