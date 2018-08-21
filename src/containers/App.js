@@ -32,7 +32,17 @@ class App extends React.Component {
     }
   }
 
+
+  closeModal = () => {
+    this.setState({
+      showEmailInput: false
+    });
+  }
+
   componentDidMount() {
+    // 点击其他地方关闭输入框
+    document.addEventListener('click', this.closeModal, false);
+
     getMessages().then(messageList => {
       console.log("获取留言板信息成功！");
       this.setState({
@@ -43,8 +53,12 @@ class App extends React.Component {
     })
   }
 
+  componentWillUnmount() {
+    document.removeEventListener('click', this.closeModal, false);
+  }
+
   loadTemplate = () => {
-    if(window.confirm('载入模板会删除您现在所有的留言板数据，确认载入吗？')) {
+    if (window.confirm('载入模板会删除您现在所有的留言板数据，确认载入吗？')) {
       loadTemplate().then(() => {
         getMessages().then(messageList => {
           console.log("获取模板信息成功！");
@@ -55,7 +69,7 @@ class App extends React.Component {
           console.log("暂时无法获取模板信息！" + err);
         })
       }).catch(err => {
-        console.log('加载模板失败，请稍后重试'+err)
+        console.log('加载模板失败，请稍后重试' + err)
       });
     }
   }

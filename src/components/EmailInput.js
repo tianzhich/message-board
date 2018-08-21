@@ -1,7 +1,41 @@
 import React from "react";
 import ReactModal from 'react-modal'
+import styled from "styled-components";
 
 ReactModal.setAppElement('#app');
+
+const customStyles = {
+  content: {
+    backgroundColor: 'rgba(255, 255, 255, 1)',
+  }
+};
+
+const Modal = styled(ReactModal)`
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  margin: auto;
+  height: 400px;
+  width: 400px;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  input {
+    border: solid 1px black;
+  }
+
+`
 
 class EmailInput extends React.Component {
   constructor(props) {
@@ -17,8 +51,7 @@ class EmailInput extends React.Component {
     }
   }
 
-  handleSubmit = e => {
-    e.preventDefault();
+  handleSubmit = () => {
     let email = this.emailInput.value;
     let author = this.authorInput.value;
 
@@ -28,16 +61,24 @@ class EmailInput extends React.Component {
 
   render() {
     return (
-      <ReactModal
+      <Modal
         isOpen={this.state.showModal}
+        style={customStyles}
       >
-        <form onSubmit={this.handleSubmit}>
-          <input type="email" name="email" ref={ele => this.emailInput = ele} />
-          <input type="text" name="author" ref={ele => this.authorInput = ele} />
-          <input type="submit" value="Publish"/>
-        </form>
+        <fieldset onClick={(e) => e.nativeEvent.stopImmediatePropagation()}>
+          <legend>Your Details:</legend>
+          <form onSubmit={this.handleSubmit}>
+            <label htmlFor="name">Name:</label>
+            <input required={true} type="email" name="email" ref={ele => this.emailInput = ele} />
+            <label htmlFor="email">Email:</label>
+            <input required={true} type="text" name="author" ref={ele => this.authorInput = ele} />
+            <br />
+            <input type="submit" value="Publish" />
+          </form>
 
-      </ReactModal>
+        </fieldset>
+
+      </Modal>
     );
   }
 }

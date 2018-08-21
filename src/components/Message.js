@@ -47,13 +47,14 @@ class Message extends React.Component {
   // replyTo存在则说明回复层主
   toggleReplyList = (replyTo) => {
     this.textInput.current.handleBlur();
-    this.setState(prevState => ({
-      showReply: !prevState.showReply
-    }));
 
     if (replyTo) {
       window.location.href = `#${this.props.message._id}`;
       this.textInput.current.handleFocus(); // focus必须发生在hash跳转之后！！！
+    } else {
+      this.setState(prevState => ({
+        showReply: !prevState.showReply
+      }));
     }
 
     this.setState({

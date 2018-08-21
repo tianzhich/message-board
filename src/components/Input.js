@@ -115,7 +115,10 @@ class Input extends React.Component {
     this.textarea.focus();
   }
 
-  handleSubmit = () => {
+  handleSubmit = (e) => {
+    // 阻止继续冒泡，防止document捕捉到closeModal()事件（此时应该打开modal）
+    e.nativeEvent.stopImmediatePropagation();
+
     if (this.props.type === InputType.RESPONSE_INPUT) {
       this.props.onResponse(this.textarea.value);
     } else if (this.props.type === InputType.REPLY_INPUT) {
@@ -141,7 +144,7 @@ class Input extends React.Component {
           addPadding={displayFooter}
           innerRef={ele => this.textarea = ele} //style-components使用innerRef
         />
-        <Button display={displayFooter} onClick={this.handleSubmit} >Publish</Button>
+        <Button display={displayFooter} onClick={(e) => this.handleSubmit(e)} >Publish</Button>
         <Counter display={displayFooter}>{200 - this.state.charNum}</Counter>
       </InputWrapper>
     );
