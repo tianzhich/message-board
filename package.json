@@ -2,7 +2,7 @@
   "name": "message-board",
   "version": "1.0.0",
   "description": "A message board by Tian Zhi",
-  "homepage": "https://tianzhich.github.io/messagebord",
+  "homepage": "https://tianzhich.github.io/message-board",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --config webpack.config.js --mode development",
