@@ -51,7 +51,8 @@ class EmailInput extends React.Component {
     }
   }
 
-  handleSubmit = () => {
+  handleSubmit = (e) => {
+    e.preventDefault();
     let email = this.emailInput.value;
     let author = this.authorInput.value;
 
@@ -67,11 +68,19 @@ class EmailInput extends React.Component {
       >
         <fieldset onClick={(e) => e.nativeEvent.stopImmediatePropagation()}>
           <legend>Your Details:</legend>
-          <form onSubmit={this.handleSubmit}>
-            <label htmlFor="name">Name:</label>
-            <input required={true} type="email" name="email" ref={ele => this.emailInput = ele} />
+          <form onSubmit={(e) => this.handleSubmit(e)}>
+            <label htmlFor="author">Name:</label>
+            <input required={true}
+              type="text"
+              name="author"
+              ref={ele => this.authorInput = ele}
+            />
             <label htmlFor="email">Email:</label>
-            <input required={true} type="text" name="author" ref={ele => this.authorInput = ele} />
+            <input required={true}
+              type="email"
+              name="email"
+              ref={ele => this.emailInput = ele}
+            />
             <br />
             <input type="submit" value="Publish" />
           </form>

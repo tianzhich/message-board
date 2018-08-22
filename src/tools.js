@@ -1,23 +1,33 @@
 import md5 from 'md5'
-import PouchDB from 'pouchdb';
 import { MessagesTemp } from './constants'
 
 export const getGravatar = (emailStr) => {
   return md5(emailStr.trim().toLowerCase());
 }
 
-const db = new PouchDB('messageList');
+var db = null;
+
+const initPouchDB = () => {
+  return import(/* webpackChunkName: 'pouchdb' */ 'pouchdb').then(PouchDB => {
+    if (!db) {
+      db = PouchDB.default('messageList');
+    }
+  });
+}
 
 const getRandomCount = (left, right) => {
-  return Math.floor(left + Math.random() * (right-left+1));
+  return Math.floor(left + Math.random() * (right - left + 1));
 }
 
 export const removeDB = () => {
-  return db.allDocs().then(results => {
-    return Promise.all(results.rows.map((row) => {
-      return db.remove(row.id, row.value.rev);
-    }))
-  });
+  return initPouchDB().then(() => {
+    return db.allDocs().then(results => {
+      return Promise.all(results.rows.map((row) => {
+        return db.remove(row.id, row.value.rev);
+      }))
+    });
+  })
+
 }
 
 export const loadTemplate = () => {
@@ -28,7 +38,8 @@ export const loadTemplate = () => {
         gravatar: getGravatar(message.email),
         applause: getRandomCount(50, 100),
         replyList: message.replyList.map(reply => (
-          { ...reply, 
+          {
+            ...reply,
             gravatar: getGravatar(reply.email),
             applause: getRandomCount(5, 20),
           }
@@ -48,7 +59,9 @@ export const addMessage = (author, email, text) => {
     applause: 0,
     replyList: []
   }
-  return db.put(message);
+  return initPouchDB().then(() => {
+    db.put(message);
+  })
 }
 
 export const addReply = (messageId, author, replyTo, email, text) => {
@@ -61,23 +74,27 @@ export const addReply = (messageId, author, replyTo, email, text) => {
     applause: 0,
     text
   };
-  return db.get(messageId).then(message => {
-    return db.put({
-      ...message,
-      replyList: [...message.replyList, reply]
+  return initPouchDB().then(() => {
+    get(messageId).then(message => {
+      return db.put({
+        ...message,
+        replyList: [...message.replyList, reply]
+      });
     });
-  });
+  })
 }
 
 export const getMessages = () => {
   let messages = [];
-  return db.allDocs({
-    include_docs: true,
-    descending: true,
-  }).then(results => {
-    results.rows.forEach(result => {
-      messages.push({ ...result.doc });
+  return initPouchDB().then(() => {
+    return db.allDocs({
+      include_docs: true,
+      descending: true,
+    }).then(results => {
+      results.rows.forEach(result => {
+        messages.push({ ...result.doc });
+      });
+      return messages;
     });
-    return messages;
-  });
+  })
 }

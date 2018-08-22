@@ -44,12 +44,11 @@ class App extends React.Component {
     document.addEventListener('click', this.closeModal, false);
 
     getMessages().then(messageList => {
-      console.log("获取留言板信息成功！");
       this.setState({
         messageList
       });
     }).catch(err => {
-      console.log("暂时获取留言板信息！" + err);
+      console.log("暂时无法获取留言板信息！" + err);
     })
   }
 
@@ -97,18 +96,16 @@ class App extends React.Component {
       content = this.state.inputContent[InputType.RESPONSE_INPUT].content;
 
       addMessage(author, email, content).
-        then(response => {
-          if (response.ok) {
-            console.log("添加成功!");
-            getMessages().then(messageList => {
-              console.log("获取最新留言板成功！");
-              this.setState({
-                messageList
-              });
-            }).catch(err => {
-              console.log("暂时无法获取最新留言！" + err);
-            })
-          }
+        then(() => {
+          console.log("添加成功!");
+          getMessages().then(messageList => {
+            console.log("获取最新留言板成功！");
+            this.setState({
+              messageList
+            });
+          }).catch(err => {
+            console.log("暂时无法获取最新留言！" + err);
+          })
         }).catch(err => {
           console.log("添加留言失败，请稍后重试！" + err);
         });;

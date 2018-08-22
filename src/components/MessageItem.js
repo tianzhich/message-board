@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import ClapButton from '../components/ClapButton';
-import moment from 'moment';
+import {format} from 'date-fns'
 
 const StyledItem = styled.div`
   padding: 15px 20px;
@@ -102,6 +102,7 @@ const Footer = styled.div`
 class MessageItem extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {}
   }
 
   onMailTo = () => {
@@ -110,7 +111,7 @@ class MessageItem extends React.Component {
 
   render() {
     const { _id, author, text, gravatar, applause } = this.props;
-    let date = moment(Number(_id)).format('YYYY-MM-DD, HH:mm');
+    let date = format(new Date(Number(_id)), 'YYYY-MM-DD, HH:MM');
     return (
       <StyledItem>
         <Header>

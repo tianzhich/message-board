@@ -1,10 +1,12 @@
 module.exports = {
-  //no need in webpack 4
-  /* entry: `./src/index.js`, */
+  entry: {
+    index: `./src/index.js`
+  },
   output: {
     path: `${__dirname}/dist/`,
     publicPath: `/`,
-    filename: `bundle.js`
+    filename: `[name].bundle.js`,
+    chunkFilename: '[name].bundle.js',
   },
   module: {
     rules: [
@@ -12,7 +14,7 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         loader: "babel-loader"
-      },
+      }/* ,
       {
         test: /\.(gif|png|jpe?g|svg)$/i,
         use: [
@@ -25,7 +27,7 @@ module.exports = {
             },
           },
         ],
-      }/* ,
+      },
       {
         test: /\.s?css$/,
         use: ["style-loader", "css-loader", "sass-loader"]
