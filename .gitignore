@@ -3,6 +3,7 @@
 
 # production
 .DS_Store
+/dist
 
 # VSCode config
 /.vscode

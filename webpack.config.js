@@ -4,7 +4,7 @@ module.exports = {
   },
   output: {
     path: `${__dirname}/dist/`,
-    publicPath: `/`,
+    publicPath: `/message-board/`,
     filename: `[name].bundle.js`,
     chunkFilename: '[name].bundle.js',
   },
