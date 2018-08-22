@@ -116,18 +116,16 @@ class App extends React.Component {
       reply_to = this.state.inputContent[InputType.REPLY_INPUT].reply_to;
 
       addReply(response_id, author, reply_to, email, content).
-        then(response => {
-          if (response.ok) {
-            console.log("添加回复成功!");
-            getMessages().then(messageList => {
-              console.log("获取最新回复成功！");
-              this.setState({
-                messageList
-              });
-            }).catch(err => {
-              console.log("暂时无法获取最新回复！" + err);
-            })
-          }
+        then(() => {
+          console.log("添加回复成功!");
+          getMessages().then(messageList => {
+            console.log("获取最新回复成功！");
+            this.setState({
+              messageList
+            });
+          }).catch(err => {
+            console.log("暂时无法获取最新回复！" + err);
+          })
         }).catch(err => {
           console.log("添加回复失败，请稍后重试！" + err);
         })

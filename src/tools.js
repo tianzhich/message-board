@@ -75,7 +75,7 @@ export const addReply = (messageId, author, replyTo, email, text) => {
     text
   };
   return initPouchDB().then(() => {
-    get(messageId).then(message => {
+    return db.get(messageId).then(message => {
       return db.put({
         ...message,
         replyList: [...message.replyList, reply]
