@@ -2,7 +2,6 @@
 /node_modules
 
 # production
-/dist
 .DS_Store
 
 # VSCode config
